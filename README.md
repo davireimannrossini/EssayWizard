@@ -1,7 +1,9 @@
 # EssayWizard
 Corretor de Redação
 
-O sistema de correção de redação online é uma ferramenta simples projetada para auxiliar professores na avaliação de redações. Com essa plataforma, os professores podem fazer o upload das fotos das redações dos alunos e realizar marcações diretamente na imagem. Com essa ferramenta, os professores podem economizar tempo e aprimorar o processo de correção de redações, permitindo uma avaliação mais eficiente e precisa."
+O sistema de correção de redação online é uma ferramenta simples projetada para auxiliar professores na avaliação de redações. Com essa plataforma, os professores podem fazer o upload das fotos das redações dos alunos e realizar marcações diretamente na imagem. Com essa ferramenta, os professores podem economizar tempo e aprimorar o processo de correção de redações, permitindo uma avaliação mais eficiente e precisa.
+
+Lista de critérios de correção
 
 <ul>
   <li>Coerência e coesão textual: avalia a organização e a conexão lógica das ideias apresentadas na redação.</li>
