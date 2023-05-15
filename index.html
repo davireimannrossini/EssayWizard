@@ -2,398 +2,463 @@
 <html>
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>Correção de Redação</title>
-  <style>
-    body {
-      background-image: url(bg.jpg);
-    }
+    <title>Correção de Redação</title>
+    <style>
+        body {
+            background-image: url(bg.jpg);
+        }
 
 
-    /* Estilo para a caixa de zoom */
-    .zoom-box {
-      position: fixed;
-      bottom: auto;
-      left: 0;
-      width: 150px;
-      height: 150px;
-      border-style: solid;
-      /* para tornar a caixa de zoom quadrada */
-      opacity: 0;
-      pointer-events: none;
-      background-size: 400%;
-      /* ajuste o tamanho do zoom da imagem aqui */
-      background-repeat: no-repeat;
-      z-index: 999;
-      /* ajuste a ordem de empilhamento da caixa de zoom aqui */
-    }
+        /* Estilo para a caixa de zoom */
+        .zoom-box {
+            position: fixed;
+            bottom: auto;
+            left: 0;
+            width: 150px;
+            height: 150px;
+            border-style: solid;
+            /* para tornar a caixa de zoom quadrada */
+            opacity: 0;
+            pointer-events: none;
+            background-size: 400%;
+            /* ajuste o tamanho do zoom da imagem aqui */
+            background-repeat: no-repeat;
+            z-index: 999;
+            /* ajuste a ordem de empilhamento da caixa de zoom aqui */
+        }
 
-    .text {
-      font-size: 24px;
-    }
+        .text {
+            font-size: 24px;
+        }
 
-    /* Estilo para o marcador */
-    .flag {
-      position: absolute;
-      top: 50px;
-      left: 50px;
-      background-color: green;
-      width: 100px;
-      height: 20px;
-      border-radius: 0%;
-      opacity: 0.4;
-    }
+        /* Estilo para o marcador */
+        .flag {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            background-color: green;
+            width: 100px;
+            height: 20px;
+            border-radius: 0%;
+            opacity: 0.4;
+        }
 
-    .container-pai {
-      display: flex;
-      width: 100%;
-      height: 100%;
-    }
+        .container-pai {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
 
-    .redacao {
-      flex-basis: 60%;
-      text-align: center;
-      overflow: hidden;
-      text-align: center;
-      background-color: transparent;
-    }
+        .redacao {
+            flex-basis: 60%;
+            text-align: center;
+            overflow: hidden;
+            text-align: center;
+            background-color: transparent;
+        }
 
-    .image {
-      text-align: center;
-      height: 100vh;
-      width: auto;
-      object-fit: scale-down;
-      cursor: pointer;
-      border-radius: 10px;
-      background-color: transparent;
-    }
+        .image {
+            text-align: center;
+            height: 100vh;
+            max-height: 650px;
+            width: auto;
+            object-fit: scale-down;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: transparent;
+        }
 
-    .marcadores {
-      flex-basis: 40%;
-      padding: 20px;
-    }
+        .marcadores {
+            flex-basis: 40%;
+            padding: 20px;
+        }
 
-    .caixa-marcadores {
-      margin: 20px;
-      border-radius: 20px;
-      background-color: #fcfcfc;
-      padding: 30px;
-      display: scroll;
-    }
+        .caixa-marcadores {
+            margin: 20px;
+            border-radius: 20px;
+            background-color: #fcfcfc;
+            padding: 30px;
+            display: scroll;
+        }
 
-    /* Caixa de Select */
-    select {
-      width: 100%;
-      padding: 12px 20px;
-      margin: 8px 0;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
+        /* Caixa de Select */
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-    /* Botão Girar */
-    .botaoGirar {
-      width: 100%;
-      padding: 12px 20px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
+        /* Botão Girar */
+        .botaoGirar {
+            width: 100%;
+            padding: 12px 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-    /* Botão Girar */
-    .botaoSalvar {
-      width: 100%;
-      padding: 12px 20px;
-      margin-bottom: 10px;
-      display: inline-block;
-      background-color: black;
-      color: #fff;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
+        /* Botão Salvar */
+        .botaoSalvar {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            display: inline-block;
+            background-color: black;
+            color: #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-    /* Botão Carergar */
-    .botaoCarregar {
-      width: 100%;
-      padding: 12px 20px;
-      display: inline-block;
-      background-color: hsl(256, 98%, 40%);
-      color: #fff;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
+        /* Botão Salvar */
+        .botaoTXT {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            display: inline-block;
+            background-color: #8d2aac;
+            color: #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-    /* Seletor Carergar */
-      .botaoSeletorCarregar {
-      width: 100%;
-      padding: 12px 20px;
-      margin-bottom: 10px;
-      display: inline-block;
-      color: #000;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
+        /* Botão Carergar */
+        .botaoCarregar {
+            width: 100%;
+            padding: 12px 20px;
+            display: inline-block;
+            background-color: hsl(256, 98%, 40%);
+            color: #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-    .flag-index {
-  position: absolute;
-  font-size: 19px;
-  top: -12px;
-  left: 100%;
-  margin-left: 5px;
-  color: red;
-  opacity: 100%;
-  background-color: #ffffff;
-  border-radius: 50%;
-}
+        /* Seletor Carregar */
+        .botaoSeletorCarregar {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            display: inline-block;
+            color: #000;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-  </style>
+        .flag-index {
+            position: absolute;
+            font-size: 19px;
+            top: -12px;
+            left: 100%;
+            margin-left: 5px;
+            color: red;
+            opacity: 100%;
+            background-color: #ffffff;
+            border-radius: 50%;
+        }
+    </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.0/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.0/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
 </head>
 
 <body>
 
-  <div class="container-pai">
+    <div class="container-pai">
 
-    <!-- Redação -->
-    <div class="redacao">
-      <div class="image-container">
-        <img class="image" src="imagem.jpg" alt="Imagem" id="imagem" />
-        <div class="zoom-box"></div>
-      </div>
+        <!-- Redação -->
+        <div class="redacao">
+            <div class="image-container">
+                <img class="image" src="imagem.jpg" alt="Imagem" id="imagem" />
+                <div class="zoom-box"></div>
+            </div>
+        </div>
+
+        <!-- Correção -->
+        <div class="marcadores">
+            <div class="caixa-marcadores">
+
+                <!-- Tutorial -->
+
+                <h4>TUTORIAL</h4>
+                <p>1. Selecione a foto a redação que deseja corrigir;<br>2. Clique no botão Enviar Imagem;<br>3.
+                    Selecione o tamanho da marcação, a cor e o critério de correção desejado;<br>4. Após fazer todas as
+                    marcações, clique em salvar imagem;
+
+                </p>
+                <!-- Carregar Imagem -->
+                <input type="file" id="input-imagem" accept="image/*" class="botaoSeletorCarregar">
+                <button id="botao-carregar-imagem" class="botaoCarregar">Enviar Imagem</button>
+
+                <!-- Seletor de Tamanho -->
+                <button onclick="rotateImage()" class="botaoGirar">Girar Imagem</button>
+
+                <!-- Captura Imagem -->
+                <button onclick="capturarImagem()" class="botaoSalvar">Salvar Imagem da Redação</button>
+
+                <!-- Salva Lista de Correçao -->
+                <button onclick="exportarListaTXT()" class="botaoTXT">Exportar Correção da Redação</button>
+
+                <!-- Seletor de Tamanho -->
+                <div>
+                    <label for="size-select">Tamanho do Marcador: </label>
+                    <select id="size-select">
+                        <option value="10px" selected>Muito Pequeno</option>
+                        <option value="20px">Pequeno</option>
+                        <option value="40px">Médio</option>
+                        <option value="80px">Grande</option>
+                    </select>
+                </div>
+
+                <!-- Seletor de Cor -->
+                <div>
+                    <label for="color-select">Cor do Marcador: </label>
+                    <select id="color-select">
+                        <option value="green" selected>Verde</option>
+                        <option value="blue">Azul</option>
+                        <option value="red">Vermelho</option>
+                        <option value="pink">Rosa</option>
+                        <option value="orange">Laranja</option>
+                        <option value="grey">Cinza</option>
+                    </select>
+                </div>
+
+                <!-- Seletor de Critério -->
+                <div>
+                    <label for="criterio-select">Critério de Correção: </label>
+                    <select id="criterio-select">
+                        <option value="Falta de coerência e coesão textual" selected>Falta de coerência e coesão textual
+                        </option>
+                        <option value="Estrutura textual equivocada">Estrutura textual equivocada</option>
+                        <option value="Uso incorreto da gramática">Uso incorreto da gramática</option>
+                        <option value="Problemas na ortografia e pontuação">Problemas na ortografia e pontuação</option>
+                        <option value="Uso de vocabulário e expressões idiomáticas">Uso de vocabulário e expressões
+                            idiomáticas</option>
+                        <option value="Falta de coerência argumentativa">Falta de coerência argumentativa</option>
+                        <option value="Originalidade e criatividade">Originalidade e criatividade</option>
+                        <option value="Fuga do tema proposto">Fuga do tema proposto</option>
+                        <option value="Mau uso de recursos argumentativos">Mau uso de recursos argumentativos</option>
+                        <option value="Erro de adequação ao gênero textual">Erro de adequação ao gênero textual</option>
+                    </select>
+                </div>
+
+                <!-- Lista de Marcadores -->
+                <div class="listacontainer"><br>
+                    <div class="listamarcadores"></div>
+                </div>
+
+            </div>
+        </div>
     </div>
-
-    <!-- Correção -->
-    <div class="marcadores">
-      <div class="caixa-marcadores">
-
-        <!-- Carregar Imagem -->
-        <input type="file" id="input-imagem" accept="image/*" class="botaoSeletorCarregar">
-        <button id="botao-carregar-imagem" class="botaoCarregar">Enviar Imagem</button>
-
-        <!-- Seletor de Tamanho -->
-        <button onclick="rotateImage()" class="botaoGirar">Girar Imagem</button>
-
-        <!-- Captura Imagem -->
-        <button onclick="capturarImagem()" class="botaoSalvar">Salvar Imagem</button>
-
-        <!-- Exportar Correção Completa -->
-        <button onclick="exportarPDF()" id="exportButton">Exportar PDF</button>
-
-
-        <!-- Seletor de Tamanho -->
-        <div>
-          <label for="size-select">Tamanho do Marcador: </label>
-          <select id="size-select">
-            <option value="10px" selected>Muito Pequeno</option>
-            <option value="20px">Pequeno</option>
-            <option value="40px">Médio</option>
-            <option value="80px">Grande</option>
-          </select>
-        </div>
-
-        <!-- Seletor de Cor -->
-        <div>
-          <label for="color-select">Cor do Marcador: </label>
-          <select id="color-select">
-            <option value="green" selected>Verde</option>
-            <option value="blue">Azul</option>
-            <option value="red">Vermelho</option>
-          </select>
-        </div>
-
-        <!-- Seletor de Critério -->
-        <div>
-          <label for="criterio-select">Critério de Correção: </label>
-          <select id="criterio-select">
-            <option value="Falta de coerência e coesão textual" selected>Falta de coerência e coesão textual</option>
-            <option value="Estrutura textual equivocada">Estrutura textual equivocada</option>
-            <option value="Uso incorreto da gramática">Uso incorreto da gramática</option>
-            <option value="Problemas na ortografia e pontuação">Problemas na ortografia e pontuação</option>
-            <option value="Uso de vocabulário e expressões idiomáticas">Uso de vocabulário e expressões idiomáticas</option>
-            <option value="Falta de coerência argumentativa">Falta de coerência argumentativa</option>
-            <option value="Originalidade e criatividade">Originalidade e criatividade</option>
-            <option value="Fuga do tema proposto">Fuga do tema proposto</option>
-            <option value="Mau uso de recursos argumentativos">Mau uso de recursos argumentativos</option>
-            <option value="Erro de adequação ao gênero textual">Erro de adequação ao gênero textual</option>
-          </select>
-        </div>
-
-        <!-- Lista de Marcadores -->
-        <div class="listacontainer"><br>
-          <div class="listamarcadores"></div>
-        </div>
-
-      </div>
-    </div>
-  </div>
 </body>
 
 </html>
 
 <script>
-  const imageContainer = document.querySelector(".image-container");
-  const zoomBox = document.querySelector(".zoom-box");
-  const image = document.querySelector(".image");
-  const flags = [];
-  const listaContainer = document.querySelector(".listamarcadores");
+    const imageContainer = document.querySelector(".image-container");
+    const zoomBox = document.querySelector(".zoom-box");
+    const image = document.querySelector(".image");
+    const flags = [];
+    const listaContainer = document.querySelector(".listamarcadores");
+    var scrollDown = false; // Variável de controle do scroll
 
 
-  function adicionarMarcador(x, y) {
-  const flag = document.createElement("div");
-  flag.classList.add("flag");
+    function adicionarMarcador(x, y) {
+        const flag = document.createElement("div");
+        flag.classList.add("flag");
 
-  /* Tamanho do marcador */
-  const sizeSelect = document.querySelector("#size-select");
-  flag.style.width = sizeSelect.value;
-  flag.style.height = sizeSelect.value * 2;
+        if (!scrollDown) {
 
-  /* Critério do marcador */
-  const criterio = document.querySelector("#criterio-select").value;
+            /* Tamanho do marcador */
+            const sizeSelect = document.querySelector("#size-select");
+            flag.style.width = sizeSelect.value;
+            flag.style.height = sizeSelect.value * 2;
 
-  if (sizeSelect.value === "80px") {
-    /* Flag grande */
-    flag.style.top = `${y - parseInt(sizeSelect.value) + 70}px`;
-    flag.style.left = `${x - parseInt(sizeSelect.value) + 30}px`;
-  } else if (sizeSelect.value === "40px") {
-    /* Flag média */
-    flag.style.top = `${y - parseInt(sizeSelect.value) + 30}px`;
-    flag.style.left = `${x - parseInt(sizeSelect.value) + 35}px`;
-  } else if (sizeSelect.value === "20px") {
-    /* Flag pequena */
-    flag.style.top = `${y - parseInt(sizeSelect.value) + 10}px`;
-    flag.style.left = `${x - parseInt(sizeSelect.value) + 15}px`;
-  } else {
-    /* Flag muito pequena */
-    flag.style.top = `${y - parseInt(sizeSelect.value)}px`;
-    flag.style.left = `${x - parseInt(sizeSelect.value) + 5}px`;
-  }
+            /* Critério do marcador */
+            const criterio = document.querySelector("#criterio-select").value;
 
-  /* Cor do marcador */
-  const colorSelect = document.querySelector("#color-select");
-  flag.style.backgroundColor = colorSelect.value;
+            if (sizeSelect.value === "80px") {
+                /* Flag grande */
+                flag.style.top = `${y - parseInt(sizeSelect.value) + 70}px`;
+                flag.style.left = `${x - parseInt(sizeSelect.value) + 30}px`;
+            } else if (sizeSelect.value === "40px") {
+                /* Flag média */
+                flag.style.top = `${y - parseInt(sizeSelect.value) + 30}px`;
+                flag.style.left = `${x - parseInt(sizeSelect.value) + 35}px`;
+            } else if (sizeSelect.value === "20px") {
+                /* Flag pequena */
+                flag.style.top = `${y - parseInt(sizeSelect.value) + 10}px`;
+                flag.style.left = `${x - parseInt(sizeSelect.value) + 15}px`;
+            } else {
+                /* Flag muito pequena */
+                flag.style.top = `${y - parseInt(sizeSelect.value)}px`;
+                flag.style.left = `${x - parseInt(sizeSelect.value) + 5}px`;
+            }
 
-  /* Adiciona o número (índice) ao lado do marcador */
-  const indice = document.createElement("span");
-  indice.classList.add("flag-index");
-indice.innerText = flags.length + 1;
-flag.appendChild(indice);
+            /* Cor do marcador */
+            const colorSelect = document.querySelector("#color-select");
+            flag.style.backgroundColor = colorSelect.value;
 
-  /* Faz a marcação */
-  imageContainer.appendChild(flag);
-  flags.push({ x, y, flag, criterio });
-}
+            /* Adiciona o número (índice) ao lado do marcador */
+            const indice = document.createElement("span");
+            indice.classList.add("flag-index");
+            indice.innerText = flags.length + 1;
+            flag.appendChild(indice);
 
-  function atualizarLista() {
-    listaContainer.innerHTML = "";
-    flags.forEach((flag, index, criterio) => {
-      const itemLista = document.createElement("div");
+            /* Faz a marcação */
+            imageContainer.appendChild(flag);
+            flags.push({ x, y, flag, criterio });
 
-      /* Adiciona o posição, nome e criterio */
-      itemLista.innerText = `${index + 1} - ${criterio[index].criterio} - (${flag.x}, ${flag.y})`;
+        } else {
+            console.log("A função está bloqueada porque a página foi rolada para baixo.");
+            alert("A função está bloqueada porque a página foi rolada para baixo.");
 
-      /* Excluir item da lista */
-      const excluirBotao = document.createElement("button");
-      excluirBotao.innerText = "Excluir";
-      excluirBotao.addEventListener("click", () => {
-        listaContainer.removeChild(itemLista);
-        imageContainer.removeChild(flag.flag);
-        flags.splice(index, 1);
+        }
+    }
+
+    function atualizarLista() {
+        listaContainer.innerHTML = "";
+        flags.forEach((flag, index, criterio) => {
+            const itemLista = document.createElement("div");
+
+            /* Adiciona o posição, nome e criterio */
+            itemLista.innerText = `${index + 1} - ${criterio[index].criterio} - (${flag.x}, ${flag.y})`;
+
+            /* Excluir item da lista */
+            const excluirBotao = document.createElement("button");
+            excluirBotao.innerText = "Excluir";
+            excluirBotao.addEventListener("click", () => {
+                listaContainer.removeChild(itemLista);
+                imageContainer.removeChild(flag.flag);
+                flags.splice(index, 1);
+                atualizarLista();
+            });
+            itemLista.appendChild(excluirBotao);
+            listaContainer.appendChild(itemLista);
+        });
+    }
+
+    /* Zoom Box */
+    imageContainer.addEventListener("mousemove", (event) => {
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+
+        const imgRect = image.getBoundingClientRect();
+        const bgPosX = ((mouseX - imgRect.left) / imgRect.width) * 100;
+        const bgPosY = ((mouseY - imgRect.top) / imgRect.height) * 100;
+
+        zoomBox.style.opacity = 1;
+        zoomBox.style.backgroundImage = `url(${image.src})`;
+        zoomBox.style.backgroundPosition = `${bgPosX}% ${bgPosY}%`;
+        zoomBox.style.left = `${mouseX + 10}px`;
+        zoomBox.style.top = `${mouseY}px`;
+    });
+
+    /* Mover mouse / dentro e fora */
+    imageContainer.addEventListener("mouseleave", () => {
+        zoomBox.style.opacity = 0;
+    });
+
+    /* Evento de Clique */
+    imageContainer.addEventListener("click", (event) => {
+        const x = event.clientX;
+        const y = event.clientY;
+        adicionarMarcador(x, y);
         atualizarLista();
-      });
-      itemLista.appendChild(excluirBotao);
-      listaContainer.appendChild(itemLista);
     });
-  }
 
-  /* Zoom Box */
-  imageContainer.addEventListener("mousemove", (event) => {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
+    /* Girar Imagem */
+    function rotateImage() {
+        var img = document.getElementById('imagem');
+        var currentRotation = parseInt(img.getAttribute('data-rotation') || '0', 10);
+        currentRotation += 180;
+        img.setAttribute('data-rotation', currentRotation);
+        img.style.transform = 'rotate(' + currentRotation + 'deg)';
+    }
+    function capturarImagem() {
+        html2canvas(document.querySelector(".image-container")).then(function (canvas) {
+            // Cria um link para download da imagem
+            const link = document.createElement("a");
+            link.download = "imagem-com-marcadores.png";
+            link.href = canvas.toDataURL();
+            // Adiciona o link à página
+            document.body.appendChild(link);
+            // Ao clicar faz download
+            link.click();
+            // deleta Link
+            document.body.removeChild(link);
+        });
+    }
 
-    const imgRect = image.getBoundingClientRect();
-    const bgPosX = ((mouseX - imgRect.left) / imgRect.width) * 100;
-    const bgPosY = ((mouseY - imgRect.top) / imgRect.height) * 100;
+    /* Carregar imagem*/
 
-    zoomBox.style.opacity = 1;
-    zoomBox.style.backgroundImage = `url(${image.src})`;
-    zoomBox.style.backgroundPosition = `${bgPosX}% ${bgPosY}%`;
-    zoomBox.style.left = `${mouseX + 10}px`;
-    zoomBox.style.top = `${mouseY}px`;
-  });
+    // Obtém o elemento de entrada de imagem
+    const inputImagem = document.getElementById("input-imagem");
 
-  /* Mover mouse / dentro e fora */
-  imageContainer.addEventListener("mouseleave", () => {
-    zoomBox.style.opacity = 0;
-  });
+    // Adiciona um manipulador de eventos para o botão "Enviar Imagem"
+    document.getElementById("botao-carregar-imagem").addEventListener("click", function () {
+        // Verifica se um arquivo de imagem foi selecionado
+        if (inputImagem.files && inputImagem.files[0]) {
+            // Cria um objeto FileReader
+            const reader = new FileReader();
 
-  /* Evento de Clique */
-  imageContainer.addEventListener("click", (event) => {
-    const x = event.clientX;
-    const y = event.clientY;
-    adicionarMarcador(x, y);
-    atualizarLista();
-  });
+            // Define uma função de retorno de chamada que será chamada quando a imagem for carregada
+            reader.onload = function (e) {
+                // Obtém o elemento de imagem original
+                const imagemOriginal = document.getElementById("imagem");
 
-  /* Girar Imagem */
-  function rotateImage() {
-    var img = document.getElementById('imagem');
-    var currentRotation = parseInt(img.getAttribute('data-rotation') || '0', 10);
-    currentRotation += 180;
-    img.setAttribute('data-rotation', currentRotation);
-    img.style.transform = 'rotate(' + currentRotation + 'deg)';
-  }
-  function capturarImagem() {
-    html2canvas(document.querySelector(".image-container")).then(function (canvas) {
-      // Cria um link para download da imagem
-      const link = document.createElement("a");
-      link.download = "imagem-com-marcadores.png";
-      link.href = canvas.toDataURL();
-      // Adiciona o link à página
-      document.body.appendChild(link);
-      // Ao clicar faz download
-      link.click();
-      // deleta Link
-      document.body.removeChild(link);
+                // Substitui o atributo "src" da imagem original com a nova imagem
+                imagemOriginal.src = e.target.result;
+            };
+
+            // Carrega a nova imagem
+            reader.readAsDataURL(inputImagem.files[0]);
+        }
     });
-  }
 
-  /* Carregar imagem*/
+    window.onscroll = function () {
+        // Verifica se a página foi rolada para baixo (scroll down)
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
 
-// Obtém o elemento de entrada de imagem
-const inputImagem = document.getElementById("input-imagem");
+            // Define a variável de controle como true
+            scrollDown = true;
 
-// Adiciona um manipulador de eventos para o botão "Enviar Imagem"
-document.getElementById("botao-carregar-imagem").addEventListener("click", function () {
-  // Verifica se um arquivo de imagem foi selecionado
-  if (inputImagem.files && inputImagem.files[0]) {
-    // Cria um objeto FileReader
-    const reader = new FileReader();
 
-    // Define uma função de retorno de chamada que será chamada quando a imagem for carregada
-    reader.onload = function (e) {
-      // Obtém o elemento de imagem original
-      const imagemOriginal = document.getElementById("imagem");
 
-      // Substitui o atributo "src" da imagem original com a nova imagem
-      imagemOriginal.src = e.target.result;
+        } else {
+            scrollDown = false; // Define a variável de controle como false se a página for rolada para cima
+        }
     };
 
-    // Carrega a nova imagem
-    reader.readAsDataURL(inputImagem.files[0]);
-  }
-});
 
+    function exportarListaTXT() {
+        var titulo = "Correção";
+        var subtitulo = "Erros encontrados";
+        var listaTexto = "";
 
+        flags.forEach((flag, index) => {
+            listaTexto += `${index + 1} - ${flag.criterio} - (${flag.x}, ${flag.y})\n`;
+        });
 
+        var textoCompleto = `${titulo}\n${subtitulo}\n${listaTexto}`;
+
+        var element = document.createElement("a");
+        element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(textoCompleto));
+        element.setAttribute("download", "correcao.txt");
+        element.style.display = "none";
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
 
 
 </script>
